@@ -72,11 +72,14 @@ class ViewController: UIViewController {
     @IBAction func result(_ sender: Any) {
         self.recorder.append("end")
         self.display.text = ""
-        var count = 2
+        var count = 1
         //var indexCount = 0
         var firstValue = ""
         var secondValue = ""
         var opp = ""
+        var isAvg = false
+        var integerCount = 1
+        
         for index in self.recorder {
             
             var isOpp = false
@@ -94,10 +97,24 @@ class ViewController: UIViewController {
             }
             
             if isOpp && opp != "" {
+                
                 if opp == "count" {
                     count = count  + 1
                     self.display.text = String(count)
+                } else if (opp == "end") && isAvg {
+                    
+                    let avgTotal = Int(firstValue)! / integerCount
+                    self.display.text = String(avgTotal)
+                    firstValue = String(avgTotal)
+                    
+                } else if opp == "avg" {
+                    integerCount = integerCount + 1
+                    isAvg = true
+                    let val = calc(firstValue, secondValue, "+")
+                    firstValue = String(val)
+                    self.display.text = self.display.text! + "hi"
                 } else {
+                    
                     let ans = calc(firstValue, secondValue, opp)
                     self.display.text = String(ans)
                     firstValue = String(ans)
@@ -114,6 +131,7 @@ class ViewController: UIViewController {
                     secondValue = ""
                     opp = ""
                 }
+                
             } else if !isOpp && opp == ""{
                 //self.display.text = self.display.text! + "hi" + index
                 firstValue = firstValue + index
@@ -140,7 +158,7 @@ class ViewController: UIViewController {
             return Int(firstValue)! / Int(secondValue)!
         } else if opp == "%" {
             return Int(firstValue)! % Int(secondValue)!
-        } else if opp == "fact" {
+        } else {
             var total = 1;
             if (firstValue) == "0" || (firstValue) == "1" {
                 total = 1;
@@ -151,9 +169,10 @@ class ViewController: UIViewController {
             }
             return total
             
-        } else { //opp = avg
-            return Int(firstValue)! + Int(secondValue)!
         }
+//        else { //opp = avg
+//            return Int(firstValue)! + Int(secondValue)!
+//        }
     }
     
     
